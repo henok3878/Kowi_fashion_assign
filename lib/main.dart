@@ -7,6 +7,8 @@ import 'package:kowi_fashion/custom_number_picker.dart';
 import 'package:kowi_fashion/custom_ruler_picker.dart';
 import 'package:numberpicker/numberpicker.dart';
 
+import 'custom_height_picker.dart';
+
 void main() {
   runApp(MyApp());
 }
@@ -135,7 +137,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       ],
                     ),
                   ),
-                  CustomRulerPicker(
+                  CustomHeightPicker(
                     key: ValueKey("custom_ruler_picker"),
                     limit: 200,
                     interval: 4,
