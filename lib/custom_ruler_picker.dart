@@ -6,7 +6,6 @@ typedef TextMapper = String Function(String numberText);
 
 class CustomRulerPicker extends StatefulWidget {
   final int interval;
-  final double totalWidth;
   final double scaleSize;
   /// total numbers on scale
   final int limit;
@@ -22,6 +21,7 @@ class CustomRulerPicker extends StatefulWidget {
 
   /// mid ending number of scale (Optional)
   final int midLimitUpper;
+
   // Number picker
 
 
@@ -38,7 +38,7 @@ class CustomRulerPicker extends StatefulWidget {
   final ValueChanged<int> onChanged;
 
   /// Specifies how many items should be shown - defaults to 3
-  final int itemCount;
+  int itemCount;
 
   /// Step between elements. Only for integer datePicker
   /// Examples:
@@ -74,13 +74,13 @@ class CustomRulerPicker extends StatefulWidget {
   /// Decoration to apply to central box where the selected value is placed
   final Decoration? decoration;
 
-
-  const CustomRulerPicker({
-    required this.totalWidth,
-    required this.scaleSize,
+  double spacing;
+  CustomRulerPicker({
+    this.spacing = 8, required this.scaleSize,
     Key? key,
     required this.minValue,
     required this.maxValue,
+
     required this.value,
     required this.onChanged,
     this.itemCount = 3,
@@ -117,6 +117,7 @@ class _CustomRulerPickerState extends State<CustomRulerPicker> {
   late String value;
   late ScrollController scrollController;
 
+
   //from ruler picker
   int type = 1;
 
@@ -136,7 +137,7 @@ class _CustomRulerPickerState extends State<CustomRulerPicker> {
   }
   List<Widget> _generateScale(BuildContext context) {
     List<Widget> scaleWidgetList = [];
-    for (int i = 0; i < widget.limit; i++) {
+    for (int i = (widget.minValue - additionalItemsOnEachSide); i < widget.maxValue + 1 + additionalItemsOnEachSide; i++) {
       scaleWidgetList.add(makeRulerBar(
         textStyle: widget.textStyle,
         key: ValueKey(i),
@@ -155,6 +156,7 @@ class _CustomRulerPickerState extends State<CustomRulerPicker> {
 
     if (mounted) setState(() {});
     return scaleWidgetList;
+
   }
 
   void _scrollListener() {
@@ -163,7 +165,7 @@ class _CustomRulerPickerState extends State<CustomRulerPicker> {
     indexOfMiddleElement = indexOfMiddleElement.clamp(0, itemCount - 1);
     final intValueInTheMiddle =
     _intValueFromIndex(indexOfMiddleElement + additionalItemsOnEachSide);
-      print("Scroll offset: " + scrollController.offset.toString());
+    print("Scroll offset: " + scrollController.offset.toString());
     print("item extent: "+ itemExtent.toString());
     print("index of middle : " + indexOfMiddleElement.toString());
     print("intValueInTheMiddle "+ intValueInTheMiddle.toString());
@@ -196,8 +198,8 @@ class _CustomRulerPickerState extends State<CustomRulerPicker> {
 
   bool get isScrolling => scrollController.position.isScrollingNotifier.value;
 
-  double get itemExtent =>
-      widget.axis == Axis.vertical ? widget.itemHeight : widget.itemWidth;
+  double get itemExtent => (widget.spacing*2 + 2) * (widget.interval + 1);
+     // widget.axis == Axis.vertical ? widget.itemHeight : widget.itemWidth;
 
   int get itemCount => (widget.maxValue - widget.minValue) ~/ widget.step + 1;
 
@@ -207,43 +209,69 @@ class _CustomRulerPickerState extends State<CustomRulerPicker> {
 
   @override
   Widget build(BuildContext context) {
-
-    return SizedBox(
-      width: widget.axis == Axis.vertical
-          ? widget.itemWidth
-          : widget.itemCount * widget.itemWidth,
-      height: widget.axis == Axis.vertical
-          ? widget.itemCount * widget.itemHeight
-          : widget.itemHeight,
-      child: NotificationListener<ScrollEndNotification>(
-        onNotification: (not) {
-          if (not.dragDetails?.primaryVelocity == 0) {
-            Future.microtask(() => _maybeCenterValue());
-          }
-          return true;
-        },
-        child: Stack(
-          children: [
-            SingleChildScrollView(
-              controller: scrollController,
-              scrollDirection: widget.axis,
-              child: RotatedBox(
-                quarterTurns: widget.axis == Axis.horizontal ? 4 : 3,
-                child: Row(
-                  children: _generateScale(context),
-                ),
-              ),),
-
-            _NumberPickerSelectedItemDecoration(
-              axis: widget.axis,
-              itemExtent: itemExtent,
-              decoration: widget.decoration,
-            ),
-          ],
+    double width = MediaQuery.of(context).size.width;
+    widget.itemCount = (width/itemExtent).round();
+    print("ItemExtent : $itemExtent");
+    print("item extent from calcualtion : ${(widget.spacing + 2) * (widget.interval + 1)}");
+    print("ItemCount : ${widget.itemCount}");
+    return Center(
+      child: SizedBox(
+        width: widget.axis == Axis.vertical
+            ? widget.itemWidth
+            : widget.itemCount * widget.itemWidth,
+        height: widget.axis == Axis.vertical
+            ? widget.itemCount * widget.itemHeight
+            : widget.itemHeight,
+        child: NotificationListener<ScrollEndNotification>(
+          onNotification: (not) {
+            if (not.dragDetails?.primaryVelocity == 0) {
+              Future.microtask(() => _maybeCenterValue());
+            }
+            return true;
+          },
+          child: Stack(
+            children: [
+              ListView.builder(
+                itemCount: listItemsCount,
+                scrollDirection: widget.axis,
+                controller: scrollController,
+                itemExtent: itemExtent,
+                itemBuilder: buildBiggerBar,
+                padding: EdgeInsets.zero,
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
+
+  Widget _itemBuilder(BuildContext context, int index) {
+
+    final themeData = Theme.of(context);
+    final defaultStyle = widget.textStyle;
+    final selectedStyle = widget.selectedTextStyle;
+
+    final value = _intValueFromIndex(index % itemCount);
+    final isExtra = (index < additionalItemsOnEachSide ||
+            index >= listItemsCount - additionalItemsOnEachSide);
+    final itemStyle = value == widget.value ? selectedStyle : defaultStyle;
+
+    final child = isExtra
+        ? SizedBox.shrink()
+        : Text(
+      _getDisplayedValue(value),
+      style: itemStyle,
+    );
+
+    return Container(
+      width: widget.itemWidth,
+      height: widget.itemHeight,
+      alignment: Alignment.center,
+      child: child,
+    );
+  }
+
 
   String _getDisplayedValue(int value) {
     final text = widget.zeroPad
@@ -257,7 +285,7 @@ class _CustomRulerPickerState extends State<CustomRulerPicker> {
   }
 
   int _intValueFromIndex(int index) {
-    //print("IntValueFromIndex : $index}");
+    print("Additional item on each side: $additionalItemsOnEachSide");
     index -= additionalItemsOnEachSide;
     index %= itemCount;
     return widget.minValue + index * widget.step;
@@ -267,16 +295,12 @@ class _CustomRulerPickerState extends State<CustomRulerPicker> {
     if (scrollController.hasClients && !isScrolling) {
       int diff = widget.value - widget.minValue;
       int index = diff ~/ widget.step;
-      print("Ruler picker widget.value : ${widget.value} - widget.minValue : ${widget.minValue}");
-      print("Ruler picker Difference : $diff");
-      print("Ruler Picker step : ${widget.step}");
-      print("Ruler picker Index : $index");
-      print("Ruler picker Index*itemExtent : ${index*itemExtent}");
-      double goTo = index * itemExtent;
-      print("Ruler picker goTo: $goTo");
-
+      print("Number picker widget.value : ${widget.value} - widget.minValue : ${widget.minValue}");
+      print("Number picker Difference : $diff");
+      print("Number Picker step : ${widget.step}");
+      print("Number picker Index : $index");
       scrollController.animateTo(
-        goTo,
+        index * itemExtent,
         duration: Duration(milliseconds: 300),
         curve: Curves.easeOutCubic,
       );
@@ -294,14 +318,13 @@ class _CustomRulerPickerState extends State<CustomRulerPicker> {
     required  midInterval,
     required  normalBarColor,
     Axis axis = Axis.horizontal,
-    double spacing = 8.0,
     required  BuildContext context
   }){
     return Container(
       height: 100,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: _getSmallBars(context,spacing,num,type,midInterval,textStyle),
+        children: _getSmallBars(context,num,type,midInterval,textStyle),
       ),
     );
   }
@@ -315,24 +338,30 @@ class _CustomRulerPickerState extends State<CustomRulerPicker> {
 
   /// get color of bigger bar according to range
 
-  List<Widget> _getSmallBars(BuildContext context, spacing,num,type,midInterval,textStyle){
-    List<Widget> children = [];
+  List<Widget> _getSmallBars(BuildContext context,num,type,midInterval,textStyle){
     final defaultStyle = widget.textStyle;
     final selectedStyle = widget.selectedTextStyle ;
-    final value = _intValueFromIndex(num % itemCount);
+    final value = num;
     /*print("Value from calculation: $value");
-    print("Value from the parent: ${widget.value}");*/
+    print("Value from the parent: ${widget.value}");
+    print("Num : $num");
+    print("Item count: ${widget.itemCount}");
+    print("num%itemCount : ${num%widget.itemCount}");*/
     bool isItemSelected = value == widget.value;
     final isExtra =
-    (num < additionalItemsOnEachSide ||
-        num >= listItemsCount - additionalItemsOnEachSide);
+    (num < widget.minValue ||
+        num > widget.maxValue);
 
     final itemStyle = isItemSelected ? selectedStyle : defaultStyle;
-
-
-    children = [];
-
+    List<Widget> children = [];
     children.add(
+      isExtra
+          ? Container(
+          margin: EdgeInsets.symmetric(horizontal: widget.spacing,vertical: 5),
+          width:2,
+          height:widget.itemHeight,
+          child: SizedBox.shrink())
+          :
       Container(
         child: Stack(
           clipBehavior: Clip.none,
@@ -341,34 +370,39 @@ class _CustomRulerPickerState extends State<CustomRulerPicker> {
             Padding(
               padding: const EdgeInsets.only(top: 20.0),
               child: Container(
-                margin: EdgeInsets.symmetric(horizontal: spacing,vertical: 5),
+                alignment: Alignment.center,
+                margin: EdgeInsets.symmetric(horizontal: widget.spacing,vertical: 5),
                 color: isItemSelected ? CustomColors.primaryColor :CustomColors.secondaryTextColor,
                 width: 2,
                 height: 32,
               ),
             ),
             Positioned(
-
               bottom: -40,
-              left: -12,
               child: Padding(
                 padding: const EdgeInsets.only(top: 50.0),
                 child: Text(
                     value.toString(),
-                    style:  isItemSelected ? selectedStyle : itemStyle)
-                ,
+                    style:  isItemSelected ? selectedStyle : itemStyle),
               ),
             ),
           ],
         ),
-      ),
+      )
     );
 
     for (int i = 1; i <= midInterval; i++) {
-      children.add(Padding(
+      children.add(
+          isExtra
+              ? Container(
+              margin: EdgeInsets.symmetric(horizontal: widget.spacing,vertical: 5),
+              width:2,
+              height:widget.itemHeight,
+              child: SizedBox.shrink()) :
+          Padding(
         padding: const EdgeInsets.only(top: 20.0),
         child: Container(
-          margin: EdgeInsets.symmetric(horizontal: spacing,vertical: 5),
+          margin: EdgeInsets.symmetric(horizontal: widget.spacing,vertical: 5),
           color: CustomColors.secondaryTextColor,
           width: 2,
           height: 16,
@@ -377,7 +411,84 @@ class _CustomRulerPickerState extends State<CustomRulerPicker> {
     }
     return children;
   }
+
+  Widget buildBiggerBar(BuildContext context, index){
+    List<Widget> singleScale = [];
+    final defaultStyle = widget.textStyle;
+    final selectedStyle = widget.selectedTextStyle;
+
+    final value = _intValueFromIndex(index % itemCount);
+    final isExtra = (index < additionalItemsOnEachSide ||
+        index >= listItemsCount - additionalItemsOnEachSide);
+    bool isItemSelected = value == widget.value;
+    final itemStyle = isItemSelected ? selectedStyle : defaultStyle;
+    singleScale.add(
+
+        isExtra
+            ? Container(
+            margin: EdgeInsets.symmetric(horizontal: widget.spacing,vertical: 5),
+            width:2,
+            height:widget.itemHeight,
+            child: SizedBox.shrink())
+            :
+        Container(
+      child: Stack(
+        clipBehavior: Clip.none,
+        alignment: Alignment.topCenter,
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.only(top: 20.0),
+            child: Container(
+              alignment: Alignment.center,
+              margin: EdgeInsets.symmetric(horizontal: widget.spacing,vertical: 5),
+              color: isItemSelected ? CustomColors.primaryColor :CustomColors.secondaryTextColor,
+              width: 2,
+              height: 32,
+            ),
+          ),
+          Positioned(
+            bottom: -40,
+            child: Padding(
+              padding: const EdgeInsets.only(top: 50.0),
+              child: Text(
+                  value.toString(),
+                  style:  isItemSelected ? selectedStyle : itemStyle),
+            ),
+          ),
+        ],
+      ),
+    ));
+    for(int i = 0; i < widget.interval; i++){
+      singleScale.add(
+          isExtra
+              ? Container(
+              margin: EdgeInsets.symmetric(horizontal: widget.spacing,vertical: 5),
+              width:2,
+              height:widget.itemHeight,
+              child: SizedBox.shrink()) :
+          Padding(
+            padding: const EdgeInsets.only(top: 20.0),
+            child: Container(
+              margin: EdgeInsets.symmetric(horizontal: widget.spacing,vertical: 5),
+              color: CustomColors.secondaryTextColor,
+              width: 2,
+              height: 16,
+            ),
+          ));
+    }
+    return
+      Container(
+        height: 100,
+        child:Row(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: singleScale,
+        ),
+      );
+  }
 }
+
+
 
 class _NumberPickerSelectedItemDecoration extends StatelessWidget {
   final Axis axis;

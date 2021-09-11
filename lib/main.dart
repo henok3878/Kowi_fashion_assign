@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:kowi_fashion/custom_colors.dart';
 import 'package:kowi_fashion/custom_number_picker.dart';
 import 'package:kowi_fashion/custom_ruler_picker.dart';
+import 'package:numberpicker/numberpicker.dart';
 
 void main() {
   runApp(MyApp());
@@ -41,6 +42,9 @@ class _MyHomePageState extends State<MyHomePage> {
   int _minWeightValue = 110;
   int _maxWeightValue = 220;
   int _currentHeightValue = 172;
+  int _minHeightValue = 1;
+  int _maxHeightValue = 300;
+  int _currentHorizontalIntValue = 172;
 
   //num showValue = 0;
   bool poundSelected = true;
@@ -132,7 +136,6 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                   ),
                   CustomRulerPicker(
-                    totalWidth: MediaQuery.of(context).size.width,
                     key: ValueKey("custom_ruler_picker"),
                     limit: 200,
                     interval: 4,
@@ -145,12 +148,12 @@ class _MyHomePageState extends State<MyHomePage> {
                         .textTheme
                         .headline6!
                         .copyWith(color: CustomColors.secondaryTextColor),
-                    itemCount: 7,
+                    itemCount: 8,
                     itemHeight: 150,
-                    itemWidth: 64,
+                    itemWidth: 100,
                     value: _currentHeightValue,
-                    minValue: 100,
-                    maxValue: 200,
+                    minValue: _minHeightValue,
+                    maxValue: _maxHeightValue,
                     step: 1,
                     haptics: true,
                     axis: Axis.horizontal,
@@ -242,6 +245,22 @@ class _MyHomePageState extends State<MyHomePage> {
                     onChanged: (value) =>
                         setState(() => _currentWeightValue = value),
                   ),
+                  /*Text("Number Picker Library"),
+                  NumberPicker(
+                    value: _currentHorizontalIntValue,
+                    minValue: 0,
+                    maxValue: 250,
+                    step: 1,
+                    itemCount: 4,
+                    itemHeight: 100,
+                    axis: Axis.horizontal,
+                    onChanged: (value) =>
+                        setState(() => _currentHorizontalIntValue = value),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(16),
+                      border: Border.all(color: Colors.black26),
+                    ),
+                  ),*/
                 ],
               ),
             ),

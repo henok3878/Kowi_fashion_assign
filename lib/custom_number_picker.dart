@@ -226,6 +226,7 @@ class _CustomNumberPickerState extends State<CustomNumberPicker> {
   }
 
   int _intValueFromIndex(int index) {
+    print("Additional item on each side: $additionalItemsOnEachSide");
     index -= additionalItemsOnEachSide;
     index %= itemCount;
     return widget.minValue + index * widget.step;
