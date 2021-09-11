@@ -165,8 +165,6 @@ class _CustomHeightPickerState extends State<CustomHeightPicker> {
   bool get isScrolling => scrollController.position.isScrollingNotifier.value;
 
   double get itemExtent => (widget.spacing*2 + 2) * (widget.interval + 1);
-  // widget.axis == Axis.vertical ? widget.itemHeight : widget.itemWidth;
-
   int get itemCount => (widget.maxValue - widget.minValue) ~/ widget.step + 1;
 
   int get listItemsCount => itemCount + 2 * additionalItemsOnEachSide;
@@ -177,9 +175,6 @@ class _CustomHeightPickerState extends State<CustomHeightPicker> {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     widget.itemCount = (width/itemExtent).round();
-    print("ItemExtent : $itemExtent");
-    print("item extent from calcualtion : ${(widget.spacing + 2) * (widget.interval + 1)}");
-    print("ItemCount : ${widget.itemCount}");
     return Center(
       child: SizedBox(
         width: widget.axis == Axis.vertical
@@ -202,7 +197,7 @@ class _CustomHeightPickerState extends State<CustomHeightPicker> {
                 scrollDirection: widget.axis,
                 controller: scrollController,
                 itemExtent: itemExtent,
-                itemBuilder: buildBiggerBar,
+                itemBuilder: _singleScaleItemBuilder,
                 padding: EdgeInsets.zero,
               ),
             ],
@@ -214,7 +209,6 @@ class _CustomHeightPickerState extends State<CustomHeightPicker> {
 
 
   int _intValueFromIndex(int index) {
-    print("Additional item on each side: $additionalItemsOnEachSide");
     index -= additionalItemsOnEachSide;
     index %= itemCount;
     return widget.minValue + index * widget.step;
@@ -224,10 +218,6 @@ class _CustomHeightPickerState extends State<CustomHeightPicker> {
     if (scrollController.hasClients && !isScrolling) {
       int diff = widget.value - widget.minValue;
       int index = diff ~/ widget.step;
-      print("Number picker widget.value : ${widget.value} - widget.minValue : ${widget.minValue}");
-      print("Number picker Difference : $diff");
-      print("Number Picker step : ${widget.step}");
-      print("Number picker Index : $index");
       scrollController.animateTo(
         index * itemExtent,
         duration: Duration(milliseconds: 300),
@@ -237,7 +227,7 @@ class _CustomHeightPickerState extends State<CustomHeightPicker> {
   }
 
 
-  Widget buildBiggerBar(BuildContext context, index){
+  Widget _singleScaleItemBuilder(BuildContext context, index){
     List<Widget> singleScale = [];
     final defaultStyle = widget.textStyle;
     final selectedStyle = widget.selectedTextStyle;
