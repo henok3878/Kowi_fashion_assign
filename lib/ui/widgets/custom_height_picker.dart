@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:kowi_fashion/custom_colors.dart';
+import 'package:kowi_fashion/utils/custom_colors.dart';
 typedef TextMapper = String Function(String numberText);
 
 class CustomHeightPicker extends StatefulWidget {
