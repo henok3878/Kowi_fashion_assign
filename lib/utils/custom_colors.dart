@@ -7,5 +7,5 @@ class  CustomColors {
   static Color primaryColor = Color(0xffdd5f5f);
   static Color boarderColor = Color(0xffe4e4e4);
   static Color backgroundColor = Color(0xffffffff);
-
+  static Color inactiveDate = Color(0xffF5F5F5);
 }

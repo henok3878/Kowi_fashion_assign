@@ -3,6 +3,7 @@ import 'package:custom_radio_grouped_button/CustomButtons/ButtonTextStyle.dart';
 import 'package:custom_radio_grouped_button/CustomButtons/CustomRadioButton.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:kowi_fashion/ui/screens/calendar.dart';
 import 'package:kowi_fashion/ui/widgets/custom_height_picker.dart';
 import 'package:kowi_fashion/ui/widgets/custom_number_picker.dart';
 import 'package:kowi_fashion/utils/custom_colors.dart';
@@ -260,7 +261,10 @@ class _MyHomePageState extends State<MiniDataScreen> {
                   children: [
                     Expanded(
                       child: ElevatedButton(
-                        onPressed: () => {},
+                        onPressed: () => {Navigator.push(context,
+                            MaterialPageRoute(builder: (context) =>
+                                CalendarScreen()
+                            ))},
                         child: Text("CONFIRM"),
                         style: ElevatedButton.styleFrom(
                             primary: CustomColors.primaryColor,
