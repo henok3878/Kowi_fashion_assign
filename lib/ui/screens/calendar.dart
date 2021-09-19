@@ -1,6 +1,7 @@
 import 'package:draggable_home/draggable_home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:kowi_fashion/ui/widgets/bottom_sheet_month_picker.dart' as customMonthPicker;
 import 'package:kowi_fashion/ui/widgets/button.dart';
 import 'package:kowi_fashion/utils/custom_colors.dart';
 import 'package:kowi_fashion/utils/date_util.dart';
@@ -82,68 +83,7 @@ class CalendarScreen extends StatelessWidget {
     );
   }
 
-  Container headerWidget(BuildContext context){
-    List<Widget> children = [];
-    int index = 0;
-    for(int i = 0; i < 4; i++){
-      List<Widget> singleRow = [];
-      for(int j = 0; j < 3; j++){
-        String label = DateUtil.months[index];
-        singleRow.add(buildRoundedButton(label: label, onPressed: ()=>{}));
-        index++;
-      }
-      children.add( Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: singleRow
-      ),);
-      if(index != 11){
-        children.add( SizedBox(height: 16,),);
-      }
-    }
-    
-    return  Container(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              IconButton(onPressed: ()=>{}, icon: Icon(Icons.arrow_back_ios,
-                color: CustomColors.primaryColor,)),
-              Text("2021",
-                style: TextStyle(
-                color: CustomColors.primaryColor,
-                fontSize: 21,
-                fontWeight: FontWeight.w700,
-              ),),
-              IconButton(onPressed: ()=>{}, icon: Icon(Icons.arrow_forward_ios,
-                color: CustomColors.primaryColor,)),
-            ],
-          ),
-          SizedBox(height: 8),
-         ...children
-        ],
-      ),
-    );
-  }
 
-
-  Widget buildRoundedButton({bool isSelected = false,required String label, required VoidCallback onPressed}){
-    return    InkWell(
-      borderRadius: BorderRadius.circular(18.0),
-      overlayColor: MaterialStateColor.resolveWith(
-            (states) => Color(0xffff5a5a),
-      ),
-      focusColor: Color(0xffff5a5a),
-      splashColor: Color(0xffff5a5a),
-      onTap: onPressed,
-      child: Button(
-        type: "$label",
-        isSelected: isSelected,
-      ),
-    );
-  }
   buildAppBar(BuildContext context) {
     return AppBar(
         backgroundColor: CustomColors.primaryColor,
@@ -196,18 +136,7 @@ class CalendarScreen extends StatelessWidget {
       backgroundColor: Colors.transparent,
         context: context,
         builder: (builder) {
-          return  Container(
-            color: Colors.transparent,
-            padding: EdgeInsets.symmetric(vertical: 16),
-            child: ClipRRect(
-                borderRadius: BorderRadius.all(Radius.circular(35)),
-                child: new Container(
-                  color: Colors.white,
-                  padding: EdgeInsets.only(top: 16, bottom: 32, left: 16, right: 16),
-
-                  child: headerWidget(context),
-                )),
-          );
+          return  customMonthPicker.MonthPicker(minYear: 2010, selectedMonth: DateTime.now().month - 1,selectedYear: DateTime.now().year,);
         });
   }
 }
