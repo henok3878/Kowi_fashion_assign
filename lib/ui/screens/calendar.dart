@@ -18,6 +18,12 @@ class CalendarScreen extends StatelessWidget {
           color: Colors.white,
           padding: EdgeInsets.fromLTRB(16,16,16,32),
           child: SfCalendar(
+            onViewChanged:(ViewChangedDetails details){
+
+            },
+            onSelectionChanged:(CalendarSelectionDetails details){
+
+            },
             headerDateFormat: 'MMM yyy',
             headerStyle: CalendarHeaderStyle(
               textStyle: TextStyle(
@@ -28,50 +34,20 @@ class CalendarScreen extends StatelessWidget {
             firstDayOfWeek: 1,
             selectionDecoration: BoxDecoration(
               color: Colors.transparent,
-              border: Border.all(color: CustomColors.primaryColor, width: 2),
+              //border: Border.all(color: CustomColors.primaryColor, width: 2),
               shape: BoxShape.rectangle,
             ),
             todayHighlightColor: CustomColors.primaryColor,
             view: CalendarView.month,
-              /*monthCellBuilder: (BuildContext buildContext, MonthCellDetails details) {
-                  print("Here are visible dates : ${details.visibleDates}");
-                    DateTime date = details.date;
-                    DateTime today = DateTime.now();
-                    bool isToday = date.year == today.year && today.month == date.month && date.day == today.day;
-                    bool isVisible = details.visibleDates.contains(date);
-                    print("Date $date \n VisibleDates ${details.visibleDates}");
-                    if(isVisible){
-                      print("Date $date \n VisibleDates ${details.visibleDates}");
-                      return Container(
-                        decoration: BoxDecoration(
-                          color: Colors.transparent,
-                          border: Border.all(color: Colors.black, width: 0.5),
-                          shape: BoxShape.rectangle,
-                        ),
-                       padding: EdgeInsets.symmetric(vertical: 8),
-                       child: Text(
-                         details.date.day.toString(),
-                         textAlign: TextAlign.center,
-                       ),
-                     );
-                    }
-                    else{
-                      return Container(
-                        padding: EdgeInsets.symmetric(vertical: 8),
-                        color: CustomColors.primaryColor,
-                        child: Text(
-                          details.date.day.toString(),
-                          style: TextStyle(
-                                       fontStyle: FontStyle.italic,
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 18,
-                                        color: Colors.black54
-                                    ),
-                          textAlign: TextAlign.center,
-                        ),
-                      );
-                    }
-                  },*/
+            monthViewSettings: MonthViewSettings(
+                monthCellStyle: MonthCellStyle(
+                  trailingDatesBackgroundColor: CustomColors.inactiveDate,
+                  leadingDatesBackgroundColor: CustomColors.inactiveDate
+                ),
+                dayFormat: 'EEE',
+                showAgenda: false,
+                navigationDirection: MonthNavigationDirection.vertical),
+                monthCellBuilder: (BuildContext buildContext, MonthCellDetails details) => monthCellBuilder(buildContext,details),
           ),
         ),
       ),
@@ -133,5 +109,62 @@ class CalendarScreen extends StatelessWidget {
         builder: (builder) {
           return  customMonthPicker.MonthPicker(minYear: 2010, selectedMonth: DateTime.now().month - 1,selectedYear: DateTime.now().year,);
         });
+
   }
+
+  monthCellBuilder(context,details){
+    DateTime date = details.date;
+    DateTime today = DateTime.now();
+    bool isToday = date.year == today.year && today.month == date.month && date.day == today.day;
+    List<int> list = [];
+    List<DateTime> plannedByUser = [
+      DateTime(2021,9,1),
+      DateTime(2021,9,3),
+      DateTime(2021,10,3),
+      DateTime(2021,9,11),
+    ];
+    List<DateTime> plannedByKowi = [
+      DateTime(2021,9,15),
+      DateTime(2021,9,25),
+      DateTime(2021,10,25),
+      DateTime(2021,9,27),
+    ];
+    int currentMonth  = details.visibleDates[15].month;
+    bool notActive = date.month > currentMonth || date.month < currentMonth;
+    bool isPlannedByKowi = plannedByKowi.contains(date);
+    bool isPlannedByUser = plannedByUser.contains(date);
+    if(!notActive){
+      return Container(
+        decoration: BoxDecoration(
+          color: isPlannedByKowi ? CustomColors.primaryColor : (isPlannedByUser ? CustomColors.pink :  Colors.transparent),
+          border: Border.all(color: isToday ? CustomColors.primaryColor :  Colors.black26, width: isToday ? 2 : 0.5),
+          shape: BoxShape.rectangle,
+        ),
+        padding: EdgeInsets.symmetric(vertical: 8),
+        child: Text(
+          details.date.day.toString(),
+          textAlign: TextAlign.center,
+        ),
+      );
+    }
+    else{
+      return Container(
+        padding: EdgeInsets.symmetric(vertical: 8),
+        decoration: BoxDecoration(
+          color: CustomColors.inactiveDate,
+          border: Border.all(color: CustomColors.boarderColor, width: 0.5),
+          shape: BoxShape.rectangle,
+        ),
+        child: Text(
+          details.date.day.toString(),
+          style: TextStyle(
+              fontStyle: FontStyle.italic,
+              color: Colors.black54
+          ),
+          textAlign: TextAlign.center,
+        ),
+      );
+    }
+  }
+
 }
