@@ -28,9 +28,11 @@ dependencies:
   draggable_home: ^1.0.2
   flutter_svg: ^0.22.0
   syncfusion_flutter_calendar: ^19.2.62
+  video_player: ^2.2.3
   auto_size_text: ^3.0.0-nullsafety.0
   google_fonts: ^2.1.0
-
+  carousel_slider: ^4.0.0
+  flutter_cache_manager: ^3.1.2
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -51,8 +53,9 @@ flutter:
   # the material Icons class.
   uses-material-design: true
 
-  # To add assets to your application, add an assets section, like this:
-  # assets:
+  #To add assets to your application, add an assets section, like this:
+  assets:
+      - assets/
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
 
