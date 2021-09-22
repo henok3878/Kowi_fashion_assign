@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_cache_manager/file.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:kowi_fashion/utils/custom_colors.dart';
 import 'package:video_player/video_player.dart';
 
@@ -26,19 +28,29 @@ class _RemoteVideo extends StatefulWidget {
 
 class _RemoteVideoState extends State<_RemoteVideo> {
   late VideoPlayerController _controller;
+  late File file;
+  late bool fetchVideoFromOnline = true;
 
-  Future<ClosedCaptionFile> _loadCaptions() async {
+/*  Future<ClosedCaptionFile> _loadCaptions() async {
     final String fileContents = await DefaultAssetBundle.of(context)
         .loadString('assets/bumble_bee_captions.srt');
     return SubRipCaptionFile(fileContents);
-  }
+  }*/
 
   @override
   void initState() {
     super.initState();
+    initPlatformState();
+    /*_controller = fetchVideoFromOnline
+        ? VideoPlayerController.network(widget.videoUrl,
+      videoPlayerOptions: VideoPlayerOptions(mixWithOthers: true),
+    ) //url of video
+        : VideoPlayerController.file(file);*/
+
+
     _controller = VideoPlayerController.network(
       widget.videoUrl,
-      closedCaptionFile: _loadCaptions(),
+     // closedCaptionFile: _loadCaptions(),
       videoPlayerOptions: VideoPlayerOptions(mixWithOthers: true),
     );
 
@@ -57,6 +69,12 @@ class _RemoteVideoState extends State<_RemoteVideo> {
 
   @override
   Widget build(BuildContext context) {
+    print("FetchVideoFromOnline $fetchVideoFromOnline");
+   /* _controller = fetchVideoFromOnline
+        ? VideoPlayerController.network(widget.videoUrl,
+      videoPlayerOptions: VideoPlayerOptions(mixWithOthers: true),
+        ) //url of video
+        : VideoPlayerController.file(file);*/
     return Stack(
       children: [
         Container(
@@ -81,8 +99,8 @@ class _RemoteVideoState extends State<_RemoteVideo> {
           FloatingActionButton(
             elevation: 0,
             mini: true,
-            onPressed: () => {},
-            child: Icon(Icons.play_arrow_rounded, size: 32,),
+            onPressed: () => { _controller.value.isPlaying ? _controller.pause() : _controller.play()},
+            child: Icon( _controller.value.isPlaying ? Icons.pause : Icons.play_arrow_rounded, size: 32,),
             backgroundColor: CustomColors.primaryColor,
             foregroundColor: Colors.white,
             shape: CircleBorder(
@@ -94,21 +112,40 @@ class _RemoteVideoState extends State<_RemoteVideo> {
       ],
     );
   }
+
+  void initPlatformState() async {
+    print("Init Cache manager to cache the video");
+    FileInfo? fileInfo = await DefaultCacheManager().getFileFromCache(widget.videoUrl);//url of video
+
+    if (fileInfo != null && fileInfo.file == null) {
+
+      setState(() {
+        fetchVideoFromOnline = true;
+      });
+
+      file = await DefaultCacheManager().getSingleFile(widget.videoUrl); //here we provide the url of video to cache.
+    } else if(fileInfo != null){
+      print('cache ln: ${fileInfo.validTill}');
+      setState(() {
+        fetchVideoFromOnline = false;
+        file = fileInfo.file;
+      });
+    }
+  }
+
 }
 
 class _ControlsOverlay extends StatelessWidget {
   const _ControlsOverlay({Key? key, required this.controller})
       : super(key: key);
 
-  static const _examplePlaybackRates = [
+  static const _playbackRates = [
     0.25,
     0.5,
     1.0,
     1.5,
     2.0,
     3.0,
-    5.0,
-    10.0,
   ];
 
   final VideoPlayerController controller;
@@ -117,7 +154,7 @@ class _ControlsOverlay extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: <Widget>[
-        AnimatedSwitcher(
+        /*AnimatedSwitcher(
           duration: Duration(milliseconds: 50),
           reverseDuration: Duration(milliseconds: 200),
           child: controller.value.isPlaying
@@ -132,7 +169,7 @@ class _ControlsOverlay extends StatelessWidget {
               ),
             ),
           ),
-        ),
+        ),*/
         GestureDetector(
           onTap: () {
             controller.value.isPlaying ? controller.pause() : controller.play();
@@ -148,7 +185,7 @@ class _ControlsOverlay extends StatelessWidget {
             },
             itemBuilder: (context) {
               return [
-                for (final speed in _examplePlaybackRates)
+                for (final speed in _playbackRates)
                   PopupMenuItem(
                     value: speed,
                     child: Text('${speed}x'),
@@ -170,4 +207,6 @@ class _ControlsOverlay extends StatelessWidget {
       ],
     );
   }
+
+
 }
