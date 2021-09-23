@@ -30,6 +30,7 @@ class _RemoteVideoState extends State<_RemoteVideo> {
   late VideoPlayerController _controller;
   late File file;
   late bool fetchVideoFromOnline = true;
+  late bool attachedListener = false;
 
 /*  Future<ClosedCaptionFile> _loadCaptions() async {
     final String fileContents = await DefaultAssetBundle.of(context)
@@ -41,24 +42,24 @@ class _RemoteVideoState extends State<_RemoteVideo> {
   void initState() {
     super.initState();
     initPlatformState();
-    /*_controller = fetchVideoFromOnline
-        ? VideoPlayerController.network(widget.videoUrl,
-      videoPlayerOptions: VideoPlayerOptions(mixWithOthers: true),
-    ) //url of video
-        : VideoPlayerController.file(file);*/
+    initVideoController();
+  }
 
-
-    _controller = VideoPlayerController.network(
-      widget.videoUrl,
-     // closedCaptionFile: _loadCaptions(),
-      videoPlayerOptions: VideoPlayerOptions(mixWithOthers: true),
-    );
-
-    _controller.addListener(() {
-      setState(() {});
-    });
-    _controller.setLooping(true);
-    _controller.initialize();
+  initVideoController(){
+     _controller = fetchVideoFromOnline
+        ? VideoPlayerController.network(
+            widget.videoUrl,
+            videoPlayerOptions: VideoPlayerOptions(mixWithOthers: true),
+          ) //url of video
+        : VideoPlayerController.file(
+            file,
+            videoPlayerOptions: VideoPlayerOptions(mixWithOthers: true)
+          );
+       _controller.addListener(() {
+         setState(() {});
+       });
+     _controller.setLooping(false);
+     _controller.initialize();
   }
 
   @override
@@ -70,11 +71,6 @@ class _RemoteVideoState extends State<_RemoteVideo> {
   @override
   Widget build(BuildContext context) {
     print("FetchVideoFromOnline $fetchVideoFromOnline");
-   /* _controller = fetchVideoFromOnline
-        ? VideoPlayerController.network(widget.videoUrl,
-      videoPlayerOptions: VideoPlayerOptions(mixWithOthers: true),
-        ) //url of video
-        : VideoPlayerController.file(file);*/
     return Stack(
       children: [
         Container(
@@ -122,7 +118,7 @@ class _RemoteVideoState extends State<_RemoteVideo> {
       setState(() {
         fetchVideoFromOnline = true;
       });
-
+      initVideoController();
       file = await DefaultCacheManager().getSingleFile(widget.videoUrl); //here we provide the url of video to cache.
     } else if(fileInfo != null){
       print('cache ln: ${fileInfo.validTill}');
