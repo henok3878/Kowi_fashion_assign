@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:kowi_fashion/models/ingredient.dart';
 import 'package:kowi_fashion/models/instruction.dart';
@@ -7,6 +8,7 @@ import 'package:kowi_fashion/ui/screens/recipe/components/instruction_item.dart'
 import 'package:kowi_fashion/utils/custom_colors.dart';
 import 'package:sizer/sizer.dart';
 
+import '../recipe_viewmodel.dart';
 import 'ingredients_carousel_slider.dart';
 
 class ScrollableSection extends StatelessWidget {
@@ -16,6 +18,8 @@ class ScrollableSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var isPortrait = MediaQuery.of(context).orientation == Orientation.portrait;
+
     return ListView(
       shrinkWrap: true,
       physics: BouncingScrollPhysics(),
@@ -28,6 +32,7 @@ class ScrollableSection extends StatelessWidget {
   }
 
   Widget buildIngredientSection(){
+
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -44,6 +49,8 @@ class ScrollableSection extends StatelessWidget {
   }
 
   List<Widget> buildInstructionSection(){
+    RecipeViewModel controller = Get.find<RecipeViewModel>();
+
     List<Widget> instructionWidgets =  List<Widget>.from(instructions.map((e) => InstructionItem(onPressed: (value)=>{}, instruction: e)));
 
     List<Widget> children = [
@@ -65,18 +72,18 @@ class ScrollableSection extends StatelessWidget {
       ),
         textAlign: TextAlign.center,),
       SizedBox(height: 12,),
-      buildUploadButton(),
+      buildUploadButton(onPressed: controller.pickImage),
       SizedBox(height: 16,),
       buildBottomButtons(),
     ];
     return children;
   }
 
-  Widget buildUploadButton(){
+  Widget buildUploadButton({required VoidCallback onPressed}){
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 25.w),
       child: ElevatedButton(
-        onPressed: () => {},
+        onPressed: onPressed,
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 6.0),
           child: Row(
@@ -153,6 +160,10 @@ class ScrollableSection extends StatelessWidget {
       ],
     );
   }
+
+
+
+
 
   Widget buildButtonFromSvg({required String svgName,required VoidCallback onPressed}){
     return GestureDetector(
