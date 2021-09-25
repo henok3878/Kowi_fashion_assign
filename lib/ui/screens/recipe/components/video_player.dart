@@ -1,8 +1,11 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_cache_manager/file.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:kowi_fashion/utils/custom_colors.dart';
 import 'package:video_player/video_player.dart';
+import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class VideoPlayerItem extends StatelessWidget {
   final String videoUrl;
@@ -13,6 +16,7 @@ class VideoPlayerItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return _RemoteVideo(videoUrl: videoUrl);
   }
+
 
 }
 
