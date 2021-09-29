@@ -28,7 +28,7 @@ class _CarouselWithIndicatorState extends State<IngredientsCarouselWithIndicator
     final indicatorWidth = (width - 48 - (2*indicatorMargin*itemLength))/itemLength;
 
     final List<Widget> imageSliders = widget.ingredients
-        .map((item) => IngredientItem(ingredient: item,backgroundColor: widget.ingredients.indexOf(item) == _current ?CustomColors.pink : Colors.white,))
+        .map((item) => IngredientItem(ingredient: item,backgroundColor: widget.ingredients.indexOf(item) == _current ?KowiColours.pink : Colors.white,))
         .toList();
     return  Column(
          mainAxisSize: MainAxisSize.min,
@@ -60,7 +60,7 @@ class _CarouselWithIndicatorState extends State<IngredientsCarouselWithIndicator
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(4),
                     shape: BoxShape.rectangle,
-                    color: _current == entry.key ? CustomColors.primaryColor: CustomColors.inactivePageIndicatorColor),
+                    color: _current == entry.key ? KowiColours.mainColor: KowiColours.inactivePageIndicatorColor),
               ),
             );
           }).toList(),

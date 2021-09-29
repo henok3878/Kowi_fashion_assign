@@ -299,7 +299,7 @@ class SelectedItem extends StatelessWidget {
         RotatedBox(
           quarterTurns: 3,
           child: Icon(
-            Icons.play_arrow, size: 48,color: CustomColors.primaryColor,),
+            Icons.play_arrow, size: 48,color: KowiColours.mainColor,),
         )
       ],
     );

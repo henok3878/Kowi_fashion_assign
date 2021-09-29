@@ -9,7 +9,7 @@ class CalendarScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: CustomColors.primaryColor,
+      backgroundColor: KowiColours.mainColor,
       appBar: buildAppBar(context),
       body: ClipRRect(
         borderRadius: BorderRadius.only(topLeft: Radius.circular(35), topRight: Radius.circular(35)),
@@ -27,22 +27,22 @@ class CalendarScreen extends StatelessWidget {
             headerDateFormat: 'MMM yyy',
             headerStyle: CalendarHeaderStyle(
               textStyle: TextStyle(
-                color: CustomColors.primaryColor,
+                color: KowiColours.mainColor,
                   fontSize: 20
               )
           ),
             firstDayOfWeek: 1,
             selectionDecoration: BoxDecoration(
               color: Colors.transparent,
-              //border: Border.all(color: CustomColors.primaryColor, width: 2),
+              //border: Border.all(color: KowiColours.primaryColor, width: 2),
               shape: BoxShape.rectangle,
             ),
-            todayHighlightColor: CustomColors.primaryColor,
+            todayHighlightColor: KowiColours.mainColor,
             view: CalendarView.month,
             monthViewSettings: MonthViewSettings(
                 monthCellStyle: MonthCellStyle(
-                  trailingDatesBackgroundColor: CustomColors.inactiveDate,
-                  leadingDatesBackgroundColor: CustomColors.inactiveDate
+                  trailingDatesBackgroundColor: KowiColours.inactiveDate,
+                  leadingDatesBackgroundColor: KowiColours.inactiveDate
                 ),
                 dayFormat: 'EEE',
                 showAgenda: false,
@@ -57,7 +57,7 @@ class CalendarScreen extends StatelessWidget {
 
   buildAppBar(BuildContext context) {
     return AppBar(
-        backgroundColor: CustomColors.primaryColor,
+        backgroundColor: KowiColours.mainColor,
         elevation: 0.0,
         toolbarHeight: 80,
         leading: IconButton(
@@ -116,7 +116,6 @@ class CalendarScreen extends StatelessWidget {
     DateTime date = details.date;
     DateTime today = DateTime.now();
     bool isToday = date.year == today.year && today.month == date.month && date.day == today.day;
-    List<int> list = [];
     List<DateTime> plannedByUser = [
       DateTime(2021,9,1),
       DateTime(2021,9,3),
@@ -136,8 +135,8 @@ class CalendarScreen extends StatelessWidget {
     if(!notActive){
       return Container(
         decoration: BoxDecoration(
-          color: isPlannedByKowi ? CustomColors.primaryColor : (isPlannedByUser ? CustomColors.pink :  Colors.transparent),
-          border: Border.all(color: isToday ? CustomColors.primaryColor :  Colors.black26, width: isToday ? 2 : 0.5),
+          color: isPlannedByKowi ? KowiColours.mainColor : (isPlannedByUser ? KowiColours.pink :  Colors.transparent),
+          border: Border.all(color: isToday ? KowiColours.mainColor :  Colors.black26, width: isToday ? 2 : 0.5),
           shape: BoxShape.rectangle,
         ),
         padding: EdgeInsets.symmetric(vertical: 8),
@@ -151,8 +150,8 @@ class CalendarScreen extends StatelessWidget {
       return Container(
         padding: EdgeInsets.symmetric(vertical: 8),
         decoration: BoxDecoration(
-          color: CustomColors.inactiveDate,
-          border: Border.all(color: CustomColors.boarderColor, width: 0.5),
+          color: KowiColours.inactiveDate,
+          border: Border.all(color: KowiColours.boarderColor, width: 0.5),
           shape: BoxShape.rectangle,
         ),
         child: Text(

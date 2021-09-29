@@ -1,10 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:kowi_fashion/ui/screens/mini_data.dart';
+import 'package:kowi_fashion/ui/screens/recipe/components/video_player.dart';
+import 'package:kowi_fashion/ui/screens/recipe/components/youtube_video_player.dart';
 import 'package:kowi_fashion/ui/screens/recipe/recipe.dart';
 import 'package:kowi_fashion/ui/screens/video_example.dart';
 import 'package:sizer/sizer.dart';
 
+import 'ui/screens/home/home.dart';
 import 'ui/widgets/custom_height_picker.dart';
 
 void main() {
@@ -21,7 +24,7 @@ class MyApp extends StatelessWidget {
       return MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Flutter Demo',
-        home: RecipeScreen()//MiniDataScreen(title: 'Flutter Demo Home Page'),
+        home: Home()//RecipeScreen()//MiniDataScreen(title: 'Flutter Demo Home Page'),
       );
     });
   }

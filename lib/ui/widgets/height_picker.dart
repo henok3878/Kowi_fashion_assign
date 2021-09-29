@@ -2,11 +2,15 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:kowi_fashion/utils/custom_colors.dart';
+
 typedef TextMapper = String Function(String numberText);
 
 class CustomHeightPicker extends StatefulWidget {
+  final bool isFeet;
+
   final int interval;
   final double scaleSize;
+
   /// total numbers on scale
   final int limit;
 
@@ -23,7 +27,6 @@ class CustomHeightPicker extends StatefulWidget {
   final int midLimitUpper;
 
   // Number picker
-
 
   /// Min value user can pick
   final int minValue;
@@ -75,32 +78,33 @@ class CustomHeightPicker extends StatefulWidget {
   final Decoration? decoration;
 
   double spacing;
-  CustomHeightPicker({
-    this.spacing = 8, required this.scaleSize,
-    Key? key,
-    required this.minValue,
-    required this.maxValue,
-
-    required this.value,
-    required this.onChanged,
-    this.itemCount = 3,
-    this.step = 1,
-    this.itemHeight = 50,
-    this.itemWidth = 100,
-    this.axis = Axis.vertical,
-    required this.textStyle,
-    required this.selectedTextStyle,
-    this.haptics = false,
-    this.decoration,
-    this.zeroPad = false,
-    this.textMapper,
-    this.interval = 4,
-    this.lowerLimit = 0,
-    this.midLimitLower = 0,
-    this.midLimitUpper = 0,
-    this.upperLimit = 0,
-    required this.limit
-  })  : assert(minValue <= value),
+  CustomHeightPicker(
+      {this.isFeet = false,
+        this.spacing = 8,
+        required this.scaleSize,
+        Key? key,
+        required this.minValue,
+        required this.maxValue,
+        required this.value,
+        required this.onChanged,
+        this.itemCount = 3,
+        this.step = 1,
+        this.itemHeight = 100,
+        this.itemWidth = 100,
+        this.axis = Axis.vertical,
+        required this.textStyle,
+        required this.selectedTextStyle,
+        this.haptics = false,
+        this.decoration,
+        this.zeroPad = false,
+        this.textMapper,
+        this.interval = 4,
+        this.lowerLimit = 0,
+        this.midLimitLower = 0,
+        this.midLimitUpper = 0,
+        this.upperLimit = 0,
+        required this.limit})
+      : assert(minValue <= value),
         assert(value <= maxValue),
         super(key: key);
 
@@ -109,7 +113,6 @@ class CustomHeightPicker extends StatefulWidget {
 }
 
 class _CustomHeightPickerState extends State<CustomHeightPicker> {
-
   //from ruler picker
   late List<Widget> scaleWidgetList;
   double lastOffset = 0;
@@ -117,20 +120,19 @@ class _CustomHeightPickerState extends State<CustomHeightPicker> {
   late String value;
   late ScrollController scrollController;
 
-
   //from ruler picker
   int type = 1;
 
   @override
   void initState() {
     super.initState();
-    final initialOffset = (widget.value - widget.minValue) ~/ widget.step * itemExtent;
+    final initialOffset =
+        (widget.value - widget.minValue) ~/ widget.step * itemExtent;
     scrollController = ScrollController(initialScrollOffset: initialOffset);
     scrollController.addListener(_scrollListener);
   }
 
   void _scrollListener() {
-
     var indexOfMiddleElement = (scrollController.offset / itemExtent).round();
     indexOfMiddleElement = indexOfMiddleElement.clamp(0, itemCount - 1);
     final intValueInTheMiddle =
@@ -164,7 +166,7 @@ class _CustomHeightPickerState extends State<CustomHeightPicker> {
 
   bool get isScrolling => scrollController.position.isScrollingNotifier.value;
 
-  double get itemExtent => (widget.spacing*2 + 2) * (widget.interval + 1);
+  double get itemExtent => (widget.spacing * 2 + 2) * (widget.interval + 1);
   int get itemCount => (widget.maxValue - widget.minValue) ~/ widget.step + 1;
 
   int get listItemsCount => itemCount + 2 * additionalItemsOnEachSide;
@@ -174,7 +176,7 @@ class _CustomHeightPickerState extends State<CustomHeightPicker> {
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
-    widget.itemCount = (width/itemExtent).round();
+    widget.itemCount = (width / itemExtent).round();
     return Center(
       child: SizedBox(
         width: widget.axis == Axis.vertical
@@ -207,7 +209,6 @@ class _CustomHeightPickerState extends State<CustomHeightPicker> {
     );
   }
 
-
   int _intValueFromIndex(int index) {
     index -= additionalItemsOnEachSide;
     index %= itemCount;
@@ -226,8 +227,7 @@ class _CustomHeightPickerState extends State<CustomHeightPicker> {
     }
   }
 
-
-  Widget _singleScaleItemBuilder(BuildContext context, index){
+  Widget _singleScaleItemBuilder(BuildContext context, index) {
     List<Widget> singleScale = [];
     final defaultStyle = widget.textStyle;
     final selectedStyle = widget.selectedTextStyle;
@@ -237,69 +237,73 @@ class _CustomHeightPickerState extends State<CustomHeightPicker> {
         index >= listItemsCount - additionalItemsOnEachSide);
     bool isItemSelected = value == widget.value;
     final itemStyle = isItemSelected ? selectedStyle : defaultStyle;
-    singleScale.add(
-
-        isExtra
-            ? Container(
-            margin: EdgeInsets.symmetric(horizontal: widget.spacing,vertical: 5),
-            width:2,
-            height:widget.itemHeight,
-            child: SizedBox.shrink())
-            :
-        Container(
-          child: Stack(
-            clipBehavior: Clip.none,
-            alignment: Alignment.topCenter,
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.only(top: 20.0),
-                child: Container(
-                  alignment: Alignment.center,
-                  margin: EdgeInsets.symmetric(horizontal: widget.spacing,vertical: 5),
-                  color: isItemSelected ? KowiColours.mainColor :KowiColours.secondaryTextColor,
-                  width: 2,
-                  height: 32,
-                ),
-              ),
-              Positioned(
-                bottom: -40,
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 50.0),
-                  child: Text(
-                      value.toString(),
-                      style:  isItemSelected ? selectedStyle : itemStyle),
-                ),
-              ),
-            ],
-          ),
-        ));
-    for(int i = 0; i < widget.interval; i++){
-      singleScale.add(
-          isExtra
-              ? Container(
-              margin: EdgeInsets.symmetric(horizontal: widget.spacing,vertical: 5),
-              width:2,
-              height:widget.itemHeight,
-              child: SizedBox.shrink()) :
+    singleScale.add(isExtra
+        ? Container(
+        margin:
+        EdgeInsets.symmetric(horizontal: widget.spacing, vertical: 5),
+        width: 2,
+        height: widget.itemHeight,
+        child: SizedBox.shrink())
+        : Container(
+      child: Stack(
+        clipBehavior: Clip.none,
+        alignment: Alignment.topCenter,
+        children: <Widget>[
           Padding(
             padding: const EdgeInsets.only(top: 20.0),
             child: Container(
-              margin: EdgeInsets.symmetric(horizontal: widget.spacing,vertical: 5),
-              color: KowiColours.secondaryTextColor,
+              alignment: Alignment.center,
+              margin: EdgeInsets.symmetric(
+                  horizontal: widget.spacing, vertical: 5),
+              color: isItemSelected
+                  ? KowiColours.mainColor
+                  : KowiColours.secondaryTextColor,
               width: 2,
-              height: 16,
+              height: 42,
             ),
-          ));
-    }
-    return
-      Container(
-        height: 100,
-        child:Row(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: singleScale,
+          ),
+          Positioned(
+            bottom: -40,
+            child: Padding(
+              padding: const EdgeInsets.only(top: 50.0),
+              child: Text(
+                  widget.isFeet ? formatInches(value) : value.toString(),
+                  style: isItemSelected ? selectedStyle : itemStyle),
+            ),
+          ),
+        ],
+      ),
+    ));
+    for (int i = 0; i < widget.interval; i++) {
+      singleScale.add(isExtra
+          ? Container(
+          margin:
+          EdgeInsets.symmetric(horizontal: widget.spacing, vertical: 5),
+          width: 2,
+          height: widget.itemHeight,
+          child: SizedBox.shrink())
+          : Padding(
+        padding: const EdgeInsets.only(top: 20.0),
+        child: Container(
+          margin: EdgeInsets.symmetric(
+              horizontal: widget.spacing, vertical: 5),
+          color: KowiColours.secondaryTextColor,
+          width: 2,
+          height: 20,
         ),
-      );
+      ));
+    }
+    return Container(
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: singleScale,
+      ),
+    );
+  }
+
+  String formatInches(valueInInch) {
+    int feet = (valueInInch / 12).floor();
+    int inch = (valueInInch % 12);
+    return "$feet.$inch";
   }
 }
-

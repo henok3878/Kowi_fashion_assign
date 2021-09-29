@@ -92,7 +92,7 @@ class ScrollableSection extends StatelessWidget {
                 fontSize: 12.sp,
                 fontWeight: FontWeight.w700,
                 fontStyle: FontStyle.normal,
-                color: CustomColors.primaryColor
+                color: KowiColours.mainColor
             )),SizedBox(width: 16,),
               SvgPicture.asset(
                   'assets/Camera.svg',width: 32,height: 32,
@@ -102,7 +102,7 @@ class ScrollableSection extends StatelessWidget {
         ),
         style: ElevatedButton.styleFrom(
             elevation: 0,
-            primary: CustomColors.pink,
+            primary: KowiColours.pink,
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(24))),
       ),
@@ -115,12 +115,12 @@ class ScrollableSection extends StatelessWidget {
         Row(children: [
           Row(
             children: [
-              IconButton(onPressed: ()=>{}, icon: Icon(Icons.favorite, size: 32, color: CustomColors.primaryColor,)),
+              IconButton(onPressed: ()=>{}, icon: Icon(Icons.favorite, size: 32, color: KowiColours.mainColor,)),
               Text("169",style: GoogleFonts.quicksand(
                   fontSize: 10.sp,
                   fontWeight: FontWeight.w500,
                   fontStyle: FontStyle.normal,
-                  color: CustomColors.primaryColor
+                  color: KowiColours.mainColor
 
               ))
             ],
@@ -132,7 +132,7 @@ class ScrollableSection extends StatelessWidget {
                   fontSize: 10.sp,
                   fontWeight: FontWeight.w500,
                   fontStyle: FontStyle.normal,
-                  color: CustomColors.primaryColor
+                  color: KowiColours.mainColor
               ))
             ],
           )

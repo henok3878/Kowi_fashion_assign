@@ -63,11 +63,11 @@ class _MonthPickerState extends State<MonthPicker> {
                             widget.selectedYear--;
                           })
                         }, icon: Icon(Icons.arrow_back_ios,
-                          color: widget.selectedYear == widget.minYear ? CustomColors.boarderColor
-                              :CustomColors.primaryColor,)),
+                          color: widget.selectedYear == widget.minYear ? KowiColours.boarderColor
+                              :KowiColours.mainColor,)),
                         Text("${widget.selectedYear}",
                           style: TextStyle(
-                            color: CustomColors.primaryColor,
+                            color: KowiColours.mainColor,
                             fontSize: 21,
                             fontWeight: FontWeight.w700,
                           ),),
@@ -76,8 +76,8 @@ class _MonthPickerState extends State<MonthPicker> {
                             widget.selectedYear++;
                           })
                         }, icon: Icon(Icons.arrow_forward_ios,
-                          color:  widget.selectedYear == widget.maxYear ? CustomColors.boarderColor
-                          : CustomColors.primaryColor,)),
+                          color:  widget.selectedYear == widget.maxYear ? KowiColours.boarderColor
+                          : KowiColours.mainColor,)),
                       ],
                     ),
                     SizedBox(height: 8),

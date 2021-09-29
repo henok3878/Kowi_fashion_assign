@@ -101,7 +101,7 @@ class _RemoteVideoState extends State<_RemoteVideo> {
             mini: true,
             onPressed: () => { _controller.value.isPlaying ? _controller.pause() : _controller.play()},
             child: Icon( _controller.value.isPlaying ? Icons.pause : Icons.play_arrow_rounded, size: 32,),
-            backgroundColor: CustomColors.primaryColor,
+            backgroundColor: KowiColours.mainColor,
             foregroundColor: Colors.white,
             shape: CircleBorder(
                 side: BorderSide(

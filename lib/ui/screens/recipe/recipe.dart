@@ -49,7 +49,7 @@ class RecipeScreen extends StatelessWidget {
           case Orientation.portrait:
             return     Scaffold(
               appBar: AppBar(
-                backgroundColor: CustomColors.backgroundColor,
+                backgroundColor: KowiColours.backgroundColor,
                 elevation: 0,
                 automaticallyImplyLeading: false,
                 title: Row(children: [
@@ -65,7 +65,7 @@ class RecipeScreen extends StatelessWidget {
                       CustomYoutubePlayer(videoPlayer: "nPt8bK2gbaU",),
                       //VideoPlayerItem(videoUrl: 'https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4',),
                       Row(children: [
-                        Icon(Icons.timer, size: 28,color: CustomColors.primaryColor,),
+                        Icon(Icons.timer, size: 28,color: KowiColours.mainColor,),
                         SizedBox(width: 8,),
                         Text("Time 30 Min", style: GoogleFonts.quicksand(
                             fontSize: 12.sp,

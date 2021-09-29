@@ -23,8 +23,8 @@ class _InstructionItemState extends State<InstructionItem> {
         children: [
           GestureDetector(onTap: ()=>{
             widget.onPressed(!widget.instruction.isFollowed)
-          },child: widget.instruction.isFollowed ? Icon(Icons.check_circle, color: CustomColors.primaryColor,) :
-          Icon(Icons.radio_button_unchecked, color: CustomColors.primaryColor,),),
+          },child: widget.instruction.isFollowed ? Icon(Icons.check_circle, color: KowiColours.mainColor,) :
+          Icon(Icons.radio_button_unchecked, color: KowiColours.mainColor,),),
           SizedBox(width: 8,),
           Expanded(child: Text(widget.instruction.instruction,style: GoogleFonts.quicksand(
               fontSize: 12.sp,

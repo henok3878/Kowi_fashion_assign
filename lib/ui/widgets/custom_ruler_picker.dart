@@ -149,7 +149,7 @@ class _CustomRulerPickerState extends State<CustomRulerPicker> {
         midLimitLower: widget.midLimitLower,
         midLimitUpper: widget.midLimitUpper,
         midInterval: widget.interval,
-        normalBarColor: CustomColors.primaryColor,
+        normalBarColor: KowiColours.mainColor,
         axis: widget.axis,
       ));
     }
@@ -372,7 +372,7 @@ class _CustomRulerPickerState extends State<CustomRulerPicker> {
               child: Container(
                 alignment: Alignment.center,
                 margin: EdgeInsets.symmetric(horizontal: widget.spacing,vertical: 5),
-                color: isItemSelected ? CustomColors.primaryColor :CustomColors.secondaryTextColor,
+                color: isItemSelected ? KowiColours.mainColor :KowiColours.secondaryTextColor,
                 width: 2,
                 height: 32,
               ),
@@ -403,7 +403,7 @@ class _CustomRulerPickerState extends State<CustomRulerPicker> {
         padding: const EdgeInsets.only(top: 20.0),
         child: Container(
           margin: EdgeInsets.symmetric(horizontal: widget.spacing,vertical: 5),
-          color: CustomColors.secondaryTextColor,
+          color: KowiColours.secondaryTextColor,
           width: 2,
           height: 16,
         ),
@@ -441,7 +441,7 @@ class _CustomRulerPickerState extends State<CustomRulerPicker> {
             child: Container(
               alignment: Alignment.center,
               margin: EdgeInsets.symmetric(horizontal: widget.spacing,vertical: 5),
-              color: isItemSelected ? CustomColors.primaryColor :CustomColors.secondaryTextColor,
+              color: isItemSelected ? KowiColours.mainColor :KowiColours.secondaryTextColor,
               width: 2,
               height: 32,
             ),
@@ -470,7 +470,7 @@ class _CustomRulerPickerState extends State<CustomRulerPicker> {
             padding: const EdgeInsets.only(top: 20.0),
             child: Container(
               margin: EdgeInsets.symmetric(horizontal: widget.spacing,vertical: 5),
-              color: CustomColors.secondaryTextColor,
+              color: KowiColours.secondaryTextColor,
               width: 2,
               height: 16,
             ),
@@ -537,7 +537,7 @@ class SelectedItem extends StatelessWidget {
         RotatedBox(
           quarterTurns: 3,
           child: Icon(
-            Icons.play_arrow, size: 48,color: CustomColors.primaryColor,),
+            Icons.play_arrow, size: 48,color: KowiColours.mainColor,),
         )
       ],
     );

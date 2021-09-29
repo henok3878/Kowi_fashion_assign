@@ -43,20 +43,20 @@ class _MyHomePageState extends State<MiniDataScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: CustomColors.backgroundColor,
+        backgroundColor: KowiColours.backgroundColor,
         appBar: AppBar(
           elevation: 0,
-          backgroundColor: CustomColors.backgroundColor,
+          backgroundColor: KowiColours.backgroundColor,
           title: Row(
             children: [
               IconButton(
                   onPressed: () => {},
                   icon: Icon(
                     Icons.arrow_back_ios_outlined,
-                    color: CustomColors.primaryColor,
+                    color: KowiColours.mainColor,
                   )),
               Text("About Me",
-                  style: TextStyle(color: CustomColors.primaryColor)),
+                  style: TextStyle(color: KowiColours.mainColor)),
             ],
           ),
         ),
@@ -75,7 +75,7 @@ class _MyHomePageState extends State<MiniDataScreen> {
                         style: Theme.of(context)
                             .textTheme
                             .headline6!
-                            .copyWith(color: CustomColors.primaryColor)),
+                            .copyWith(color: KowiColours.mainColor)),
                   ),
                   buildDatePicker(),
                   SizedBox(height: 16),
@@ -90,18 +90,18 @@ class _MyHomePageState extends State<MiniDataScreen> {
                           style: Theme.of(context)
                               .textTheme
                               .headline6!
-                              .copyWith(color: CustomColors.primaryColor),
+                              .copyWith(color: KowiColours.mainColor),
                         ),
                         CustomRadioButton(
                           buttonTextStyle: ButtonTextStyle(
-                              unSelectedColor: CustomColors.primaryColor),
+                              unSelectedColor: KowiColours.mainColor),
                           enableShape: true,
                           elevation: 0,
                           defaultSelected: "Meters",
                           enableButtonWrap: true,
                           width: 100,
                           autoWidth: false,
-                          unSelectedColor: CustomColors.backgroundColor,
+                          unSelectedColor: KowiColours.backgroundColor,
                           buttonLables: [
                             "Feet",
                             "Meters",
@@ -113,9 +113,9 @@ class _MyHomePageState extends State<MiniDataScreen> {
                           radioButtonValue: (value) {
                             print(value);
                           },
-                          unSelectedBorderColor: CustomColors.boarderColor,
-                          selectedColor: CustomColors.primaryColor,
-                          selectedBorderColor: CustomColors.primaryColor,
+                          unSelectedBorderColor: KowiColours.boarderColor,
+                          selectedColor: KowiColours.mainColor,
+                          selectedBorderColor: KowiColours.mainColor,
                         ),
                       ],
                     ),
@@ -128,11 +128,11 @@ class _MyHomePageState extends State<MiniDataScreen> {
                     selectedTextStyle: Theme.of(context)
                         .textTheme
                         .headline4!
-                        .copyWith(color: CustomColors.primaryColor),
+                        .copyWith(color: KowiColours.mainColor),
                     textStyle: Theme.of(context)
                         .textTheme
                         .headline6!
-                        .copyWith(color: CustomColors.secondaryTextColor),
+                        .copyWith(color: KowiColours.secondaryTextColor),
                     itemCount: 8,
                     itemHeight: 150,
                     itemWidth: 100,
@@ -155,17 +155,17 @@ class _MyHomePageState extends State<MiniDataScreen> {
                             style: Theme.of(context)
                                 .textTheme
                                 .headline6!
-                                .copyWith(color: CustomColors.primaryColor)),
+                                .copyWith(color: KowiColours.mainColor)),
                         CustomRadioButton(
                           buttonTextStyle: ButtonTextStyle(
-                              unSelectedColor: CustomColors.primaryColor),
+                              unSelectedColor: KowiColours.mainColor),
                           enableShape: true,
                           elevation: 0,
                           defaultSelected: "Pound",
                           enableButtonWrap: true,
                           width: 100,
                           autoWidth: false,
-                          unSelectedColor: CustomColors.backgroundColor,
+                          unSelectedColor: KowiColours.backgroundColor,
                           buttonLables: [
                             "Kg",
                             "Pound",
@@ -201,9 +201,9 @@ class _MyHomePageState extends State<MiniDataScreen> {
                               }
                             });
                           },
-                          unSelectedBorderColor: CustomColors.boarderColor,
-                          selectedColor: CustomColors.primaryColor,
-                          selectedBorderColor: CustomColors.primaryColor,
+                          unSelectedBorderColor: KowiColours.boarderColor,
+                          selectedColor: KowiColours.mainColor,
+                          selectedBorderColor: KowiColours.mainColor,
                         ),
                       ],
                     ),
@@ -213,11 +213,11 @@ class _MyHomePageState extends State<MiniDataScreen> {
                     selectedTextStyle: Theme.of(context)
                         .textTheme
                         .headline4!
-                        .copyWith(color: CustomColors.primaryColor),
+                        .copyWith(color: KowiColours.mainColor),
                     textStyle: Theme.of(context)
                         .textTheme
                         .headline6!
-                        .copyWith(color: CustomColors.secondaryTextColor),
+                        .copyWith(color: KowiColours.secondaryTextColor),
                     itemCount: 7,
                     itemHeight: 150,
                     itemWidth: 64,
@@ -267,7 +267,7 @@ class _MyHomePageState extends State<MiniDataScreen> {
                             ))},
                         child: Text("CONFIRM"),
                         style: ElevatedButton.styleFrom(
-                            primary: CustomColors.primaryColor,
+                            primary: KowiColours.mainColor,
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10))),
                       ),
@@ -293,7 +293,7 @@ class _MyHomePageState extends State<MiniDataScreen> {
             fontSize: 20,
             letterSpacing: 0.15,
             fontWeight: FontWeight.w500,
-            color: CustomColors.primaryColor,
+            color: KowiColours.mainColor,
             decoration: TextDecoration.none,
           ),
         ),
